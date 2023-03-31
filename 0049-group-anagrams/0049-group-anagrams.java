@@ -4,10 +4,12 @@ class Solution {
         List<List<String>> res = new ArrayList<>(); 
         HashMap<String,List<String>> map = new HashMap<>();
         for(String s:strs){
-          char[] ch1 = s.toCharArray();
-          Arrays.sort(ch1);
-          //String word = Arrays.toString(ch1); can use this also
-          String word = new String(ch1);
+          int[] hash = new int[26];
+          for(int i=0;i<s.length();i++){
+              hash[s.charAt(i)-'a']++;
+          }
+          //String word = Arrays.toString(hash); can use this also
+          String word = new String(Arrays.toString(hash));
           if(map.containsKey(word)){
               map.get(word).add(s);
           }
