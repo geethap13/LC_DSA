@@ -37,10 +37,11 @@ class GFG {
 class Solution {
     // Function to return a list containing the DFS traversal of the graph.
      public void dfsHelper(int V, ArrayList<ArrayList<Integer>> adj,int[] visited,ArrayList<Integer> res) {
-         if(visited[V] == 1) return;
+        
           visited[V] = 1;
           res.add(V);
           for(Integer node:adj.get(V))
+          if(visited[node] == 0)
              dfsHelper(node,adj,visited,res);
      }     
     public ArrayList<Integer> dfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
