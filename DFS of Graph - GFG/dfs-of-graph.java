@@ -40,8 +40,8 @@ class Solution {
          if(visited[V] == 1) return;
           visited[V] = 1;
           res.add(V);
-          for(int i =0;i<adj.get(V).size();i++)
-             dfsHelper(adj.get(V).get(i),adj,visited,res);
+          for(Integer node:adj.get(V))
+             dfsHelper(node,adj,visited,res);
      }     
     public ArrayList<Integer> dfsOfGraph(int V, ArrayList<ArrayList<Integer>> adj) {
         // Code here
