@@ -61,28 +61,29 @@ class Main {
 class Solution
 {
     //Function to return list containing vertices in Topological order. 
-    public static void dfs(int V,ArrayList<ArrayList<Integer>> adj,int[] visited,Stack<Integer> st){
-        visited[V] = 1;
-        for(Integer node:adj.get(V)){
-            if(visited[node] == 0) dfs(node,adj,visited,st);
-        }
-        st.push(V);
-    }
     static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj) 
     {
-        // add your code here
-        int[] visited = new int[V];
-        Stack<Integer> st = new Stack<>();
-        for(int i=0;i<V;i++){
-            if(visited[i] == 0)
-             dfs(i,adj,visited,st);
-        }
+        // add your code here bfs kahns algo
+        int[] indegree = new int[V];
         int[] res = new int[V];
-        int i = 0;
-        while(!st.isEmpty()){
-            res[i++] = st.pop();
+         Queue<Integer> q = new LinkedList<>();
+          for(int i =0;i<V;i++){
+            for(Integer node:adj.get(i)){
+                indegree[node]++;
+            }
         }
-       //System.out.println(res);
+        for(int i =0;i<V;i++){
+            if(indegree[i] == 0) q.add(i);
+        }
+        int i=0;
+        while(!q.isEmpty()){
+            int v = q.poll();
+            res[i++] = v;
+            for(Integer node:adj.get(v)){
+                indegree[node]--;
+                if(indegree[node] == 0) q.add(node);
+            }
+        }
         return res;
     }
 }
