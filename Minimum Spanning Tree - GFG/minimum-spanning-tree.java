@@ -32,62 +32,85 @@ public class Main{
 
 
 // User function Template for Java
-class Pair{
-    int distance,node;
-    Pair(int _d,int _n){
-        distance  = _d;
-        node = _n;
+class DisjointSet {
+    List<Integer> rank = new ArrayList<>();
+    List<Integer> parent = new ArrayList<>();
+    List<Integer> size = new ArrayList<>();
+    public DisjointSet(int n) {
+        for (int i = 0; i <= n; i++) {
+            rank.add(0);
+            parent.add(i);
+            size.add(1);
+        }
+    }
+
+    public int findUPar(int node) {
+        if (node == parent.get(node)) {
+            return node;
+        }
+        int ulp = findUPar(parent.get(node));
+        parent.set(node, ulp);
+        return parent.get(node);
+    }
+
+    public void unionByRank(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (rank.get(ulp_u) < rank.get(ulp_v)) {
+            parent.set(ulp_u, ulp_v);
+        } else if (rank.get(ulp_v) < rank.get(ulp_u)) {
+            parent.set(ulp_v, ulp_u);
+        } else {
+            parent.set(ulp_v, ulp_u);
+            int rankU = rank.get(ulp_u);
+            rank.set(ulp_u, rankU + 1);
+        }
+    }
+
+    public void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u);
+        int ulp_v = findUPar(v);
+        if (ulp_u == ulp_v) return;
+        if (size.get(ulp_u) < size.get(ulp_v)) {
+            parent.set(ulp_u, ulp_v);
+            size.set(ulp_v, size.get(ulp_v) + size.get(ulp_u));
+        } else {
+            parent.set(ulp_v, ulp_u);
+            size.set(ulp_u, size.get(ulp_u) + size.get(ulp_v));
+        }
     }
 }
 class Solution{
-    public static int primsalgo(int V,ArrayList<ArrayList<ArrayList<Integer>>> adj){
-        PriorityQueue<Pair> pq = new PriorityQueue<Pair>((a,b)->a.distance-b.distance);
-	    int[] dist = new int[V];
-	    int[] vis = new int[V];
-	    Arrays.fill(dist,(int)1e9);
-	    dist[0] = 0;
-	    Pair p = new Pair(0,0);
-	    pq.add(p);
-	    int sum = 0;
-	    while(!pq.isEmpty()){
-	        int curnode = pq.peek().node;
-	        int curweight = pq.peek().distance;
-	        pq.remove();
-	        if (vis[curnode] == 1) continue;
-	        vis[curnode] = 1;
-	        sum += curweight;
-	         for(int i=0;i<adj.get(curnode).size();i++){
-	             int node = adj.get(curnode).get(i).get(0);
-	             int d = adj.get(curnode).get(i).get(1);
-	            if (vis[node] == 0) {
-                    pq.add(new Pair(d, node));
-                }
-	         }
-	    }
-	    return sum;
+    static void sortByCol(int[][] edges){
+         Arrays.sort(edges,new Comparator<int[]>(){
+	        public int compare(final int[] entry1,final int[] entry2){
+	            if(entry1[2]>entry2[2] ) return 1;
+	            if(entry1[2] == entry2[2]) return 0;
+	            else return -1;
+	        }
+	    });
     }
-    
 	static int spanningTree(int V, int E, int edges[][]){
 	    // Code Here. 
-	   ArrayList< ArrayList<ArrayList<Integer>>> adj = new ArrayList< ArrayList<ArrayList<Integer>>>();
+	   
 	    
-	    for(int i =0;i<V;i++){
-	        adj.add(new ArrayList<ArrayList<Integer>>());
-	    }
-	    
-	    for(int i=0;i<edges.length;i++){
-	         int u = edges[i][0];
-	         int v = edges[i][1];
-	         int wt = edges[i][2];
-	         ArrayList<Integer> temp = new ArrayList<>();
-	         temp.add(v);
-	         temp.add(wt);
-	          ArrayList<Integer> temp1 = new ArrayList<>();
-	         temp1.add(u);
-	         temp1.add(wt);
-	         adj.get(u).add(temp);
-	         adj.get(v).add(temp1);
-	  	    }
-	    return primsalgo(V,adj);
+	    DisjointSet ds = new DisjointSet(V);
+	    sortByCol(edges);
+        // M log M
+        int mstWt = 0;
+        // M x 4 x alpha x 2
+        for (int i = 0; i < edges.length; i++) {
+            int wt = edges[i][2];
+            int u = edges[i][0];
+            int v = edges[i][1];
+
+            if (ds.findUPar(u) != ds.findUPar(v)) {
+                mstWt += wt;
+                ds.unionBySize(u, v);
+            }
+        }
+
+        return mstWt;
 	}
 }
