@@ -49,8 +49,8 @@ class DisjointSet {
             return node;
         }
         int ulp = findUPar(parent.get(node));
-        parent.set(node, ulp);
-        return parent.get(node);
+       // parent.set(node, ulp);
+        return ulp;
     }
 
     public void unionByRank(int u, int v) {
