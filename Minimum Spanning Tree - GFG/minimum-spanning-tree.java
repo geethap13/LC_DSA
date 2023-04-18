@@ -105,7 +105,7 @@ class Solution{
 
             if (ds.findUP(u) != ds.findUP(v)) {
                 mstWt += wt;
-                ds.UnionBySize(u, v);
+                ds.UnionByRank(u, v);
             }
         }
 
