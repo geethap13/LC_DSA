@@ -75,7 +75,7 @@ class DisjointSet{
           }
           else{
               parent.set(v_UP,u_UP);
-              rank.set(u_UP,rank.get(u_UP)+rank.get(v_UP));
+              rank.set(u_UP,rank.get(u_UP)+1);
           }
       }
 }
