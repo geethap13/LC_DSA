@@ -96,7 +96,6 @@ class Solution
         for(int i=0;i<K;i++){
             if(indegree[i] == 0) q.add(i);
         }
-        //int[] visited = new int[K];
         while(!q.isEmpty()){
             int node = q.poll();
             ans += (char)(node + (int)('a'));
@@ -105,7 +104,27 @@ class Solution
                 if(indegree[adjnode] == 0) q.add(adjnode);
             }
         }
-         //.out.println(ans);
+        return ans;
+    }
+    public void dfs(ArrayList<ArrayList<Integer>> adj,int[] visited,int node,Stack<Integer> st){
+        visited[node] = 1;
+        for(int adjnode:adj.get(node)){
+            if(visited[adjnode]==0) dfs(adj,visited,adjnode,st);
+        }
+        st.add(node);
+    }
+    public String toposortdfs(int K,ArrayList<ArrayList<Integer>> adj){
+        int[] visited = new int[K];
+        Stack<Integer> st = new Stack<>();
+        for(int i=0;i<K;i++){
+            if(visited[i]==0){
+                dfs(adj,visited,i,st);
+            }
+        }
+        String ans = "";
+        while(!st.isEmpty()){
+            ans += (char)(st.pop() +(int)'a');
+        }
         return ans;
     }
     public String findOrder(String [] dict, int N, int K)
