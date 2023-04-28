@@ -84,7 +84,7 @@ class GFG {
 
 class Solution
 {
-    public String toposort(int K,ArrayList<ArrayList<Integer>> adj){
+    public String toposortBfs(int K,ArrayList<ArrayList<Integer>> adj){
         String ans = "";
         int[] indegree = new int[K];
         for(int i=0;i<K;i++){
@@ -146,6 +146,6 @@ class Solution
                 }
             }
         }
-        return toposort(K,adj);
+        return toposortdfs(K,adj);
     }
 }
